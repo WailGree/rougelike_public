@@ -5,4 +5,7 @@ def display_board(board):
     Returns:
     Nothing
     '''
-    pass
+    for row in board:
+        for element in row:
+            print(element, end='')
+        print()
