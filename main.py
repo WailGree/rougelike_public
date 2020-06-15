@@ -3,7 +3,9 @@ import engine
 import ui
 
 
-# Characters: 🗝️ 💀
+# Characters: 🗝️ 💀 🤕 🐲 💊 🗡️ 🔪 🛡️
+# Races: Human, elf, dwarf
+#        👨 👩 🧝‍♂️ 🧝‍♀️ 👨 👩
 PLAYER_ICON = '@'
 PLAYER_START_X = 3
 PLAYER_START_Y = 3
