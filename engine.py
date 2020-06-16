@@ -23,7 +23,7 @@ def put_player_on_board(board, player):
     Returns:
     Nothing
     '''
-        width = len(board[0])
+    width = len(board[0])
     height = len(board)
     is_in_board = False
     for h in range(height):
