@@ -12,8 +12,10 @@ def display_board(board):
         for w in range(width):
             if board[h][w] != 0:
                 print(board[h][w], end='')
-            elif h == 0 or w == 0 or h == height-1 or w == width-1:
+            elif w == 0 or w == width-1:
                 print('🧱', end='')
+            elif h == height-1 or h == 0:
+                print('🧱', end=' ')
             elif board[h][w] == 0:
                 print(' ', end=' ')
             else:
