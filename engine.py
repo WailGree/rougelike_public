@@ -23,4 +23,14 @@ def put_player_on_board(board, player):
     Returns:
     Nothing
     '''
-    pass
+        width = len(board[0])
+    height = len(board)
+    is_in_board = False
+    for h in range(height):
+        for w in range(width):
+            if board[h][w] == player:
+                is_in_board = True
+                break
+    if is_in_board is False:        
+        board[x][y] = player
+
