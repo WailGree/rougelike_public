@@ -12,7 +12,7 @@ def create_board(width, height):
     return [[0 for x in range(width)] for y in range(height)]
 
 
-def put_player_on_board(board, player):
+def put_player_on_board(board, player, x, y):
     '''
     Modifies the game board by placing the player icon at its coordinates.
 
@@ -31,6 +31,5 @@ def put_player_on_board(board, player):
             if board[h][w] == player:
                 is_in_board = True
                 break
-    if is_in_board is False:        
+    if is_in_board is False:
         board[x][y] = player
-
