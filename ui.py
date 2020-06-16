@@ -5,7 +5,18 @@ def display_board(board):
     Returns:
     Nothing
     '''
-    for row in board:
-        for element in row:
-            print(element, end='')
+    width = len(board[0])
+    height = len(board)
+
+    for h in range(height):
+        for w in range(width):
+            if board[h][w] != 0:
+                print(board[h][w], end='')
+            elif h == 0 or w == 0 or h == height-1 or w == width-1:
+                print('🧱', end='')
+            elif board[h][w] == 0:
+                print(' ', end=' ')
+            else:
+                print(board[h][w], end=' ')
         print()
+        
