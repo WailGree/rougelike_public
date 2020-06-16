@@ -1,7 +1,7 @@
 import util
 import engine
 import ui
-# import WailGree
+import WailGree
 
 # Characters: 🗝️ 💀 🤕 🐲 💊 🗡️ 🔪 🛡️
 # Races: Human, elf, dwarf
@@ -22,18 +22,21 @@ def create_player():
     Returns:
     dictionary
     '''
-    name = input("Please tell me your name:\n")
-    race = input("""Please choose a race (by number)
+    WailGree.write_message('Student', 'Please tell me your name:')
+    name = input()
+    WailGree.write_message('Student', """Please choose a race (by number)
     1 Dwarf (ProgBasics)
     2 Human (Web)
     3 Elf   (OOP)\n""")
+    race = input()
     if race == '1':
         race = 'Dwarf'
     elif race == '2':
         race = 'Human'
     elif race == '3':
         race = 'Elf'
-    gender = input("Please choose gender(M/F):\n")
+    WailGree.write_message('Student', 'Please choose gender(m/f):')
+    gender = input()
     player = {'name': name, 'race': race, 'gender': gender.upper()}
     if race == 'Dwarf':
         if gender.upper() == 'M' or gender.upper() == 'F':
@@ -48,7 +51,12 @@ def create_player():
 
 
 def main():
+    choice = input("Do you want to watch the story? (y/n)").upper()
+    if choice == 'Y':
+        WailGree.story_telling()
     player = create_player()
+    if choice == 'Y':
+        WailGree.write_message(player['name'], '')
     board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT)
 
     util.clear_screen()
