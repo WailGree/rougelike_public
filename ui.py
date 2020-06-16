@@ -19,4 +19,3 @@ def display_board(board):
             else:
                 print(board[h][w], end=' ')
         print()
-        
