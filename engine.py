@@ -9,8 +9,7 @@ def create_board(width, height):
     Returns:
     list: Game board
     '''
-    board = [[0 for x in range(width)] for y in range(height)]
-    return board
+    return [[0 for x in range(width)] for y in range(height)]
 
 
 def put_player_on_board(board, player):
