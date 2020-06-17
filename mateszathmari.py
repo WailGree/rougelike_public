@@ -75,6 +75,14 @@ def chech_is_door(map_number, door_positions, board, row, col):
         return False
 
 
+def check_player_has_key():
+    pass
+
+
+def collect_stuffs(board):
+    pass
+
+
 def next_map(map_number, player, door_positions, row, col):
     if map_number == 1:
         new_map_number = map_number + 1
