@@ -15,6 +15,8 @@ PLAYER_START_Y = 3
 BOARD_WIDTH = 30
 BOARD_HEIGHT = 20
 
+backpack = []
+
 
 def create_player():
     '''
@@ -58,17 +60,19 @@ def game(map_number, player):
     board = mateszathmari.generate_stuffs(
         engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), map_number)
     util.clear_screen()
+    backpack = []
     is_running = True
     while is_running:   # loop in loops in loops in loops
         engine.put_player_on_board(
             board, player, PLAYER_START_X, PLAYER_START_Y)
         ui.display_board(board)
+        print(backpack)
 
         key = util.key_pressed()
         if key == 'q':
             is_running = False
         else:
-            board2, PLAYER_START_X2, PLAYER_START_Y2, map_number = mateszathmari.move_player(
+            board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack = mateszathmari.move_player(
                 key, board, player, map_number)
             valid, board = ai.mob_move(board, '💀')
             if board2 != 0:
@@ -85,7 +89,8 @@ def main():
     # player = create_player()
     # if choice == 'Y':
     #     WailGree.write_message(player['name'], '')
-    player = {'gender': 'M', 'icon': '🙇', 'name': 'sdfsdf', 'race': 'Dwarf'} # for test only
+    player = {'gender': 'M', 'icon': '🙇',
+              'name': 'sdfsdf', 'race': 'Dwarf'}  # for test only
     map_number = 1
     game(map_number, player['icon'])
 
