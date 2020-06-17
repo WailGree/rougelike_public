@@ -75,11 +75,22 @@ def chech_is_door(map_number, door_positions, board, row, col):
         return False
 
 
-def check_player_has_key(backpack, map_number):
+def check_player_has_key(backpack, map_number, row, col, door_positions):
+    new_map_number = next_map_numer(map_number, row, col, door_positions)
     if '🗝️ ' in backpack.keys():
-        if backpack['🗝️ '] >= map_number:
+        if backpack['🗝️ '] >= new_map_number-1:
             return True
     return False
+
+
+def next_map_numer(map_number, row, col, door_positions):
+    if map_number == 1:
+        new_map_number = map_number + 1
+    elif row == door_positions[map_number-1][0] and col == door_positions[map_number-1][1]:
+        new_map_number = map_number - 1
+    elif row == door_positions[map_number-1][2] and col == door_positions[map_number-1][3]:
+        new_map_number = map_number + 1
+    return new_map_number
 
 
 def collect_stuffs(board, row, col):    # of the next step col/row
@@ -185,7 +196,7 @@ def move_player(key, board, player, map_number):
                 board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
                 return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
             else:
-                if chech_is_door(map_number, door_positions, board, row-1, col) and check_player_has_key(backpack, map_number):
+                if chech_is_door(map_number, door_positions, board, row-1, col) and check_player_has_key(backpack, map_number, row-1, col, door_positions):
                     board[row-1][col] = board[row][col]
                     board[row][col] = 0
                     board, PLAYER_START_X, PLAYER_START_Y, map_number = next_map(
@@ -206,7 +217,7 @@ def move_player(key, board, player, map_number):
                 board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
                 return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
             else:
-                if chech_is_door(map_number, door_positions, board, row+1, col) and check_player_has_key(backpack, map_number):
+                if chech_is_door(map_number, door_positions, board, row+1, col) and check_player_has_key(backpack, map_number, row+1, col, door_positions):
                     board[row+1][col] = board[row][col]
                     board[row][col] = 0
                     board, PLAYER_START_X, PLAYER_START_Y, map_number = next_map(
@@ -227,7 +238,7 @@ def move_player(key, board, player, map_number):
                 board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
                 return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
             else:
-                if chech_is_door(map_number, door_positions, board, row, col-1) and check_player_has_key(backpack, map_number):
+                if chech_is_door(map_number, door_positions, board, row, col-1) and check_player_has_key(backpack, map_number, row, col-1, door_positions):
                     board[row][col-1] = board[row][col]
                     board[row][col] = 0
                     board, PLAYER_START_X, PLAYER_START_Y, map_number = next_map(
@@ -248,7 +259,7 @@ def move_player(key, board, player, map_number):
                 board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
                 return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
             else:
-                if chech_is_door(map_number, door_positions, board, row, col+1) and check_player_has_key(backpack, map_number):
+                if chech_is_door(map_number, door_positions, board, row, col+1) and check_player_has_key(backpack, map_number, row, col+1, door_positions):
                     board[row][col+1] = board[row][col]
                     board[row][col] = 0
                     board, PLAYER_START_X, PLAYER_START_Y, map_number = next_map(
@@ -264,28 +275,21 @@ def generate_stuffs(board, map_number):
     height = len(board)
     if map_number == 1:
         board[door_positions[0][0]][door_positions[0][1]] = '🚪'
-        if main.visited_rooms == 0:
+        if '🗝️ ' not in main.backpack.keys():
             board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
-            main.visited_rooms += 1
     elif map_number == 2:
         board[door_positions[1][0]][door_positions[1][1]] = '🚪'
         board[door_positions[1][2]][door_positions[1][3]] = '🚪'
-        if main.visited_rooms == 1:
+        if main.backpack['🗝️ '] == 1:
             board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
-            main.visited_rooms += 1
     elif map_number == 3:
         board[door_positions[2][0]][door_positions[2][1]] = '🚪'
         board[door_positions[2][2]][door_positions[2][3]] = '🚪'
-        if main.visited_rooms == 2:
+        if main.backpack['🗝️ '] == 2:
             board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
-            main.visited_rooms += 1
     elif map_number == 4:
         board[door_positions[3][0]][door_positions[3][1]] = '🚪'
-        if main.visited_rooms == 3:
-            board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
-            main.visited_rooms += 1
 
-    
     board[randint(1, height-2)][randint(1, width-2)] = '💀'
     board[randint(1, height-2)][randint(1, width-2)] = '🤕'
     board[randint(1, height-2)][randint(1, width-2)] = '💊'
