@@ -45,9 +45,8 @@
 
 '''
 
-import ui
+
 import engine
-import main_test    # SHOULD BE MAIN !!!!!!!!!
 from random import randint
 
 # [room[exit pos x,exit pos y,enter pos x,enter pos y]]
@@ -79,8 +78,9 @@ def check_player_has_key():
     pass
 
 
-def collect_stuffs(board):
+def collect_stuffs(board, row, col):
     pass
+    board[row-1][col] = board[row][col]
 
 
 def next_map(map_number, player, door_positions, row, col):
@@ -129,7 +129,6 @@ def map_details(map_number):
 def move_player(key, board, player, map_number):
     width = len(board[0])
     height = len(board)
-
     for h in range(height):
         for w in range(width):
             if board[h][w] == player:
