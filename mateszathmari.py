@@ -77,17 +77,29 @@ def chech_is_door(map_number, door_positions, board, row, col):
 
 def next_map(map_number, player, door_positions, row, col):
     if map_number == 1:
-        map_number += 1
+        new_map_number = map_number + 1
     elif row == door_positions[map_number-1][0] and col == door_positions[map_number-1][1]:
-        map_number -= 1
+        new_map_number = map_number - 1
     elif row == door_positions[map_number-1][2] and col == door_positions[map_number-1][3]:
-        map_number += 1
+        new_map_number = map_number + 1
     BOARD_WIDTH, BOARD_HEIGHT, PLAYER_START_X, PLAYER_START_Y = map_details(
-        map_number)
+        new_map_number)
     board = generate_stuffs(
-        engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), map_number)
-    return board, PLAYER_START_X, PLAYER_START_Y, map_number
-    #main_test.game(map_number, player)
+        engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), new_map_number)
+    if new_map_number < map_number:
+        PLAYER_START_X, PLAYER_START_Y = room_back(new_map_number, map_number)
+    return board, PLAYER_START_X, PLAYER_START_Y, new_map_number
+    # main_test.game(map_number, player)
+
+
+def room_back(new_map_number, map_number):
+    if map_number == 2 and new_map_number == 1:
+        PLAYER_START_X, PLAYER_START_Y = 6, 28
+    elif map_number == 3 and new_map_number == 2:
+        PLAYER_START_X, PLAYER_START_Y = 21, 5
+    elif map_number == 4 and new_map_number == 3:
+        PLAYER_START_X, PLAYER_START_Y = 7, 1
+    return PLAYER_START_X, PLAYER_START_Y
 
 
 def map_details(map_number):
