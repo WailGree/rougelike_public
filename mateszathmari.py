@@ -290,10 +290,7 @@ def generate_stuffs(board, map_number):
     elif map_number == 4:
         board[door_positions[3][0]][door_positions[3][1]] = '🚪'
 
-    board[randint(1, height-2)][randint(1, width-2)] = '💀'
-    board[randint(1, height-2)][randint(1, width-2)] = '🤕'
-    board[randint(1, height-2)][randint(1, width-2)] = '💊'
-    board[randint(1, height-2)][randint(1, width-2)] = '🗡️ '
-    board[randint(1, height-2)][randint(1, width-2)] = '🛡️ '
-    board[randint(1, height-2)][randint(1, width-2)] = '🐲'
+    characters = ['🐲', '🛡️ ', '🗡️ ', '💊', '🤕', '💀']
+    for element in characters:
+        board[randint(1, height-2)][randint(1, width-2)] = element
     return board
