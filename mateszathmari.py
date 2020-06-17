@@ -45,48 +45,14 @@
 
 '''
 
-# ui.display_board(board)
 import ui
 import engine
+import main_test    # SHOULD BE MAIN !!!!!!!!!
 from random import randint
 
-
-# board = engine.create_board(30, 20)
-
-# board[15][29] = '🚪'
-# board[15][2] = '🗝️ '
-# board[14][4] = '💀'
-# board[2][7] = '🤕'
-# board[5][9] = '💊'
-# board[14][15] = '🗡️ '
-# board[10][9] = '🛡️ '
-# board[13][2] = '🐲'
-
-
-# def display_board(board):   # ui
-#     width = len(board[0])
-#     height = len(board)
-
-#     for h in range(height):
-#         for w in range(width):
-#             if board[h][w] != 0:
-#                 print(board[h][w], end='')
-#             elif h == 0 or w == 0 or h == height-1 or w == width-1:
-#                 print('🧱', end='')
-#             elif board[h][w] == 0:
-#                 print(' ', end=' ')
-#             else:
-#                 print(board[h][w], end=' ')
-#         print()
-
-
-# ui.display_board(board)
-
-
-# [room number][enter door x, enter door y,exit door x, exit door y]
-door_positions = [[6, 29, 0, 0], [1, 1, 22, 5], [
-    0, 9, 7, 0], [17, 13, 0, 0]]    # !!!!!!!!!!!!!!!!
-map_number = 1
+# [room[exit pos x,exit pos y,enter pos x,enter pos y]]
+door_positions = [[6, 29, 0, 0], [1, 0, 22, 5], [
+    0, 5, 7, 0], [13, 17, 0, 0]]
 
 
 def checking_is_wall(board, row, col):
@@ -103,11 +69,44 @@ def checking_is_wall(board, row, col):
 def chech_is_door(map_number, door_positions, board, row, col):
     if row == door_positions[map_number-1][0] and col == door_positions[map_number-1][1]:
         return True
+    elif row == door_positions[map_number-1][2] and col == door_positions[map_number-1][3]:
+        return True
     else:
         return False
 
 
-def move_player(key, board, player):
+def next_map(map_number, player, door_positions, row, col):
+    if map_number == 1:
+        map_number += 1
+    elif row == door_positions[map_number-1][0] and col == door_positions[map_number-1][1]:
+        map_number -= 1
+    elif row == door_positions[map_number-1][2] and col == door_positions[map_number-1][3]:
+        map_number += 1
+    BOARD_WIDTH, BOARD_HEIGHT, PLAYER_START_X, PLAYER_START_Y = map_details(
+        map_number)
+    board = generate_stuffs(
+        engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), map_number)
+    return board, PLAYER_START_X, PLAYER_START_Y, map_number
+    #main_test.game(map_number, player)
+
+
+def map_details(map_number):
+    if map_number == 1:
+        BOARD_WIDTH, BOARD_HEIGHT = 30, 20
+        PLAYER_START_X, PLAYER_START_Y = 3, 3
+    elif map_number == 2:
+        BOARD_WIDTH, BOARD_HEIGHT = 14, 23
+        PLAYER_START_X, PLAYER_START_Y = 1, 1
+    elif map_number == 3:
+        BOARD_WIDTH, BOARD_HEIGHT = 9, 9
+        PLAYER_START_X, PLAYER_START_Y = 1, 5
+    elif map_number == 4:
+        BOARD_WIDTH, BOARD_HEIGHT = 18, 15
+        PLAYER_START_X, PLAYER_START_Y = 13, 16  # start points when you going back!!
+    return BOARD_WIDTH, BOARD_HEIGHT, PLAYER_START_X, PLAYER_START_Y
+
+
+def move_player(key, board, player, map_number):
     width = len(board[0])
     height = len(board)
 
@@ -124,11 +123,18 @@ def move_player(key, board, player):
                     board[row][col] = '🚪'
                 else:
                     board[row][col] = 0
+                board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
+                return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number
             else:
                 if chech_is_door(map_number, door_positions, board, row-1, col):
                     board[row-1][col] = board[row][col]
                     board[row][col] = 0
-                    game(1, player)
+                    board, PLAYER_START_X, PLAYER_START_Y, map_number = next_map(
+                        map_number, player, door_positions, row-1, col)
+                    return board, PLAYER_START_X, PLAYER_START_Y, map_number
+                else:
+                    board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
+                    return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number
     elif key == 's':
         if row + 1 < height:
             if checking_is_wall(board, row+1, col) is False:
@@ -137,10 +143,18 @@ def move_player(key, board, player):
                     board[row][col] = '🚪'
                 else:
                     board[row][col] = 0
+                board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
+                return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number
             else:
                 if chech_is_door(map_number, door_positions, board, row+1, col):
                     board[row+1][col] = board[row][col]
                     board[row][col] = 0
+                    board, PLAYER_START_X, PLAYER_START_Y, map_number = next_map(
+                        map_number, player, door_positions, row+1, col)
+                    return board, PLAYER_START_X, PLAYER_START_Y, map_number
+                else:
+                    board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
+                    return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number
     elif key == 'a':
         if col - 1 >= 0:
             if checking_is_wall(board, row, col-1) is False:
@@ -149,10 +163,18 @@ def move_player(key, board, player):
                     board[row][col] = '🚪'
                 else:
                     board[row][col] = 0
+                board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
+                return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number
             else:
                 if chech_is_door(map_number, door_positions, board, row, col-1):
                     board[row][col-1] = board[row][col]
                     board[row][col] = 0
+                    board, PLAYER_START_X, PLAYER_START_Y, map_number = next_map(
+                        map_number, player, door_positions, row, col-1)
+                    return board, PLAYER_START_X, PLAYER_START_Y, map_number
+                else:
+                    board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
+                    return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number
     elif key == 'd':
         if col + 1 < width:
             if checking_is_wall(board, row, col+1) is False:
@@ -161,21 +183,31 @@ def move_player(key, board, player):
                     board[row][col] = '🚪'
                 else:
                     board[row][col] = 0
+                board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
+                return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number
             else:
                 if chech_is_door(map_number, door_positions, board, row, col+1):
                     board[row][col+1] = board[row][col]
                     board[row][col] = 0
+                    board, PLAYER_START_X, PLAYER_START_Y, map_number = next_map(
+                        map_number, player, door_positions, row, col+1)
+                    return board, PLAYER_START_X, PLAYER_START_Y, map_number
+                else:
+                    board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
+                    return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number
 
 
-def generate_stuffs(board, map_number=1):
+def generate_stuffs(board, map_number):
     width = len(board[0])
     height = len(board)
     if map_number == 1:
         board[door_positions[0][0]][door_positions[0][1]] = '🚪'
     elif map_number == 2:
         board[door_positions[1][0]][door_positions[1][1]] = '🚪'
+        board[door_positions[1][2]][door_positions[1][3]] = '🚪'
     elif map_number == 3:
         board[door_positions[2][0]][door_positions[2][1]] = '🚪'
+        board[door_positions[2][2]][door_positions[2][3]] = '🚪'
     elif map_number == 4:
         board[door_positions[3][0]][door_positions[3][1]] = '🚪'
 
@@ -187,5 +219,3 @@ def generate_stuffs(board, map_number=1):
     board[randint(1, height-2)][randint(1, width-2)] = '🛡️ '
     board[randint(1, height-2)][randint(1, width-2)] = '🐲'
     return board
-
-# ui.display_board(board)
