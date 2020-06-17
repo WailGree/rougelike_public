@@ -15,7 +15,8 @@ PLAYER_START_Y = 3
 BOARD_WIDTH = 30
 BOARD_HEIGHT = 20
 
-backpack = []
+backpack = {}
+visited_rooms = 0
 
 
 def create_player():
@@ -60,7 +61,7 @@ def game(map_number, player):
     board = mateszathmari.generate_stuffs(
         engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), map_number)
     util.clear_screen()
-    backpack = []
+    backpack = {}
     is_running = True
     while is_running:   # loop in loops in loops in loops
         engine.put_player_on_board(
