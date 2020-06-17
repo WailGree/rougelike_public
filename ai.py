@@ -2,7 +2,7 @@ import copy
 import random
 
 
-def get_mob_position(borad, mob):
+def get_mob_position(board, mob):
     mob_position = []
     for row in range(get_board_rows(board)):
         for col in range(get_borad_cols(board)):
@@ -15,7 +15,7 @@ def get_board_rows(board):
     return len(board)
 
 
-def get_borad_cols(borad):
+def get_borad_cols(board):
     try:
         return len(board[0])
     except IndexError:
@@ -87,3 +87,4 @@ def mob_move(board, mob):
             board[get_row_position(mob_new_position)][get_col_position(mob_new_position)] = 0, mob
             valid_new_step = True
     return True, board
+    
