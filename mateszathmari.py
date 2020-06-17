@@ -176,6 +176,15 @@ def map_details(map_number):
     return BOARD_WIDTH, BOARD_HEIGHT, PLAYER_START_X, PLAYER_START_Y
 
 
+def potter_wall(player, map_number, board, row, col, next_row, next_col):
+    if chech_is_door(map_number, door_positions, board, next_row, next_col):
+        return False
+    elif next_row == 19 and next_col == 27 and map_number == 1:
+        return True
+    elif next_row == 0 and next_col == 15 and map_number == 4:
+        return True
+
+
 def move_depending_on_key(player, map_number, board, row, col, next_row, next_col):
     backpack = collect_stuffs(board, next_row, next_col)
     if checking_is_wall(board, next_row, next_col) is False:
@@ -187,7 +196,24 @@ def move_depending_on_key(player, map_number, board, row, col, next_row, next_co
         board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
         return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
     else:
-        if chech_is_door(map_number, door_positions, board, next_row, next_col) and check_player_has_key(backpack, map_number, next_row, next_col, door_positions):
+        if potter_wall(player, map_number, board, row, col, next_row, next_col):
+            if map_number == 1:
+                map_number = 4
+                BOARD_WIDTH, BOARD_HEIGHT, PLAYER_START_X, PLAYER_START_Y = map_details(
+                    map_number)
+                board2 = generate_stuffs(
+                    engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), map_number)
+                PLAYER_START_X2, PLAYER_START_Y2 = 0, 15
+            elif map_number == 4:
+                map_number = 1
+                BOARD_WIDTH, BOARD_HEIGHT, PLAYER_START_X, PLAYER_START_Y = map_details(
+                    1)
+                board2 = generate_stuffs(
+                    engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), 1)
+                PLAYER_START_X2, PLAYER_START_Y2 = 19, 27
+            # generate 4.th room
+            return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
+        elif chech_is_door(map_number, door_positions, board, next_row, next_col) and check_player_has_key(backpack, map_number, next_row, next_col, door_positions):
             board[next_row][next_col] = board[row][col]
             board[row][col] = 0
             board, PLAYER_START_X, PLAYER_START_Y, map_number = next_map(
