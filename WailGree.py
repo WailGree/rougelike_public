@@ -34,3 +34,23 @@ def story_telling():
     input('Press enter to continue...')
     write_message(
         'Student', 'Then I\'ll wish you the best of luck... But before you go, I have a few questions...')
+
+
+weapons = {
+    'Beginner\'s Wrath': {'damage': 1},
+    'Adapt\'s Bravery': {'damage': 2},
+    'Expert\'s Edge': {'damage': 5},
+    'The CEO\'s Ban Hammer': {'damage': 10}
+}
+armors = {
+    'Python shirt': {'armor': 1},
+    'Javascript bib shorts': {'armor': 2},
+    'Java jacket': {'armor': 5},
+    'Mentorbot costume': {'armor': 10}
+}
+food = {
+    'Rushed breakfast': {'HP restore': 10},
+    'Avarage lunch': {"HP restore": 15},
+    'McDonald\'s Happy Meal menu': {'HP restore': 35},
+    'Grandma\'s family sized dinner': {'HP restore': 75}
+}

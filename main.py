@@ -2,6 +2,7 @@ import util
 import engine
 import ui
 import WailGree
+import mateszathmari
 
 # Characters: 🗝️ 💀 🤕 🐲 💊 🗡️ 🔪 🛡️
 # Races: Human, elf, dwarf
@@ -50,6 +51,31 @@ def create_player():
     return player
 
 
+def game(map_number, player):
+    BOARD_WIDTH, BOARD_HEIGHT, PLAYER_START_X, PLAYER_START_Y = mateszathmari.map_details(
+        map_number)
+    board = mateszathmari.generate_stuffs(
+        engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), map_number)
+    util.clear_screen()
+    is_running = True
+    while is_running:   # loop in loops in loops in loops
+        engine.put_player_on_board(
+            board, player, PLAYER_START_X, PLAYER_START_Y)
+        ui.display_board(board)
+
+        key = util.key_pressed()
+        if key == 'q':
+            is_running = False
+        else:
+            board2, PLAYER_START_X2, PLAYER_START_Y2, map_number = mateszathmari.move_player(
+                key, board, player, map_number)
+            if board2 != 0:
+                board = board2
+                PLAYER_START_X = PLAYER_START_X2
+                PLAYER_START_Y = PLAYER_START_Y2
+        util.clear_screen()
+
+
 def main():
     choice = input("Do you want to watch the story? (y/n)").upper()
     if choice == 'Y':
@@ -57,20 +83,9 @@ def main():
     player = create_player()
     if choice == 'Y':
         WailGree.write_message(player['name'], '')
-    board = engine.create_board(BOARD_WIDTH, BOARD_HEIGHT)
 
-    util.clear_screen()
-    is_running = False
-    while is_running:
-        engine.put_player_on_board(board, player)
-        ui.display_board(board)
-
-        key = util.key_pressed()
-        if key == 'q':
-            is_running = False
-        else:
-            pass
-        util.clear_screen()
+    map_number = 1
+    game(map_number, player['icon'])
 
 
 if __name__ == '__main__':
