@@ -176,6 +176,28 @@ def map_details(map_number):
     return BOARD_WIDTH, BOARD_HEIGHT, PLAYER_START_X, PLAYER_START_Y
 
 
+def move_depending_on_key(player, map_number, board, row, col, next_row, next_col):
+    backpack = collect_stuffs(board, next_row, next_col)
+    if checking_is_wall(board, next_row, next_col) is False:
+        board[next_row][next_col] = board[row][col]
+        if chech_is_door(map_number, door_positions, board, row, col):
+            board[row][col] = '🚪'
+        else:
+            board[row][col] = 0
+        board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
+        return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
+    else:
+        if chech_is_door(map_number, door_positions, board, next_row, next_col) and check_player_has_key(backpack, map_number, next_row, next_col, door_positions):
+            board[next_row][next_col] = board[row][col]
+            board[row][col] = 0
+            board, PLAYER_START_X, PLAYER_START_Y, map_number = next_map(
+                map_number, player, door_positions, next_row, next_col)
+            return board, PLAYER_START_X, PLAYER_START_Y, map_number, backpack
+        else:
+            board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
+            return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
+
+
 def move_player(key, board, player, map_number):
     width = len(board[0])
     height = len(board)
@@ -186,88 +208,21 @@ def move_player(key, board, player, map_number):
                 col = w
     if key == 'w':
         if row - 1 >= 0:
-            backpack = collect_stuffs(board, row-1, col)
-            if checking_is_wall(board, row-1, col) is False:
-                board[row-1][col] = board[row][col]
-                if chech_is_door(map_number, door_positions, board, row, col):
-                    board[row][col] = '🚪'
-                else:
-                    board[row][col] = 0
-                board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
-                return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
-            else:
-                if chech_is_door(map_number, door_positions, board, row-1, col) and check_player_has_key(backpack, map_number, row-1, col, door_positions):
-                    board[row-1][col] = board[row][col]
-                    board[row][col] = 0
-                    board, PLAYER_START_X, PLAYER_START_Y, map_number = next_map(
-                        map_number, player, door_positions, row-1, col)
-                    return board, PLAYER_START_X, PLAYER_START_Y, map_number, backpack
-                else:
-                    board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
-                    return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
+            board, PLAYER_START_X, PLAYER_START_Y, map_number, backpack = move_depending_on_key(
+                player, map_number, board, row, col, row-1, col)
     elif key == 's':
         if row + 1 < height:
-            backpack = collect_stuffs(board, row+1, col)
-            if checking_is_wall(board, row+1, col) is False:
-                board[row+1][col] = board[row][col]
-                if chech_is_door(map_number, door_positions, board, row, col):
-                    board[row][col] = '🚪'
-                else:
-                    board[row][col] = 0
-                board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
-                return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
-            else:
-                if chech_is_door(map_number, door_positions, board, row+1, col) and check_player_has_key(backpack, map_number, row+1, col, door_positions):
-                    board[row+1][col] = board[row][col]
-                    board[row][col] = 0
-                    board, PLAYER_START_X, PLAYER_START_Y, map_number = next_map(
-                        map_number, player, door_positions, row+1, col)
-                    return board, PLAYER_START_X, PLAYER_START_Y, map_number, backpack
-                else:
-                    board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
-                    return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
+            board, PLAYER_START_X, PLAYER_START_Y, map_number, backpack = move_depending_on_key(
+                player, map_number, board, row, col, row+1, col)
     elif key == 'a':
         if col - 1 >= 0:
-            backpack = collect_stuffs(board, row, col-1)
-            if checking_is_wall(board, row, col-1) is False:
-                board[row][col-1] = board[row][col]
-                if chech_is_door(map_number, door_positions, board, row, col):
-                    board[row][col] = '🚪'
-                else:
-                    board[row][col] = 0
-                board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
-                return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
-            else:
-                if chech_is_door(map_number, door_positions, board, row, col-1) and check_player_has_key(backpack, map_number, row, col-1, door_positions):
-                    board[row][col-1] = board[row][col]
-                    board[row][col] = 0
-                    board, PLAYER_START_X, PLAYER_START_Y, map_number = next_map(
-                        map_number, player, door_positions, row, col-1)
-                    return board, PLAYER_START_X, PLAYER_START_Y, map_number, backpack
-                else:
-                    board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
-                    return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
+            board, PLAYER_START_X, PLAYER_START_Y, map_number, backpack = move_depending_on_key(
+                player, map_number, board, row, col, row, col-1)
     elif key == 'd':
         if col + 1 < width:
-            backpack = collect_stuffs(board, row, col+1)
-            if checking_is_wall(board, row, col+1) is False:
-                board[row][col+1] = board[row][col]
-                if chech_is_door(map_number, door_positions, board, row, col):
-                    board[row][col] = '🚪'
-                else:
-                    board[row][col] = 0
-                board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
-                return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
-            else:
-                if chech_is_door(map_number, door_positions, board, row, col+1) and check_player_has_key(backpack, map_number, row, col+1, door_positions):
-                    board[row][col+1] = board[row][col]
-                    board[row][col] = 0
-                    board, PLAYER_START_X, PLAYER_START_Y, map_number = next_map(
-                        map_number, player, door_positions, row, col+1)
-                    return board, PLAYER_START_X, PLAYER_START_Y, map_number, backpack
-                else:
-                    board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
-                    return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
+            board, PLAYER_START_X, PLAYER_START_Y, map_number, backpack = move_depending_on_key(
+                player, map_number, board, row, col, row, col+1)
+    return board, PLAYER_START_X, PLAYER_START_Y, map_number, backpack
 
 
 def generate_stuffs(board, map_number):
