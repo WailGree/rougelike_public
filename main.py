@@ -58,13 +58,17 @@ def create_player():
 def generate_mob(map_number):
     mob = {}
     if map_number == 1:
-        mob.update({'HP': 10, 'damage': 5, 'armor': 3, 'icon': '💀'})
+        mob.update({'name': 'skeleton', 'HP': 10,
+                    'damage': 5, 'armor': 3, 'icon': '💀'})
     elif map_number == 2:
-        mob.update({'HP': 15, 'damage': 3, 'armor': 5, 'icon': '👽'})
+        mob.update({'name': 'alien', 'HP': 15,
+                    'damage': 3, 'armor': 5, 'icon': '👽'})
     elif map_number == 3:
-        mob.update({'HP': 20, 'damage': 1, 'armor': 7, 'icon': '👺'})
+        mob.update({'name': 'devil', 'HP': 20,
+                    'damage': 1, 'armor': 7, 'icon': '👺'})
     elif map_number == 4:
-        mob.update({'HP': 20, 'damage': 1, 'armor': 7, 'icon': '👿'})
+        mob.update({'name': 'mentor guardian', 'HP': 20,
+                    'damage': 1, 'armor': 7, 'icon': '👿'})
     return mob
 
 
@@ -83,9 +87,8 @@ def game(map_number, player):
             board, player, PLAYER_START_X, PLAYER_START_Y)
         ui.display_board(board)
         if show_inventory:
-            WailGree.display_inventory()
+            WailGree.display_inventory(backpack)
             print(mob)
-        print(backpack)
 
         key = util.key_pressed()
         if key == 'q':
@@ -116,7 +119,7 @@ def main():
     if choice == 'Y':
         WailGree.write_message(player['name'], '')
     # player = {'gender': 'M', 'icon': '🙇',
-    #           'name': 'sdfsdf', 'race': 'Dwarf'}  # for test only
+    #           'name': 'sdfsdf', 'race': 'Dwarf', 'HP': 20, 'damage': 1, 'armor': 7, 'icon': '🧝'}  # for test only
     map_number = 1
     game(map_number, player)
 
