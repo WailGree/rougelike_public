@@ -86,7 +86,7 @@ def mob_move(board, mob, player, mob_details):
         mob_new_position = mob_random_step(mob_position[0])
         if is_valid_mob_position(board_cols, board_rows, mob_new_position):
             if mateszathmari.battle(
-                    board, mob_new_position[0], mob_new_position[1], player, mob_details):
+                    board, mob_new_position[0], mob_new_position[1], player, mob_details)[0]:
                 board[get_row_position(mob_position[0])
                       ][get_col_position(mob_position[0])] = 0
                 break
