@@ -1,13 +1,14 @@
 import copy
 import random
+import mateszathmari
 
 
 def get_mob_position(board, mob):
     mob_position = []
     for row in range(get_board_rows(board)):
         for col in range(get_borad_cols(board)):
-                if board[row][col] == mob:
-                    mob_position.append((row, col))
+            if board[row][col] == mob:
+                mob_position.append((row, col))
     return mob_position
 
 
@@ -34,7 +35,7 @@ def is_valid_mob_position(board_cols, board_rows, position):
     mob_row_position = get_row_position(position)
     mob_col_position = get_col_position(position)
     if mob_row_position > 0 and mob_row_position < board_rows - 1 and \
-        mob_col_position > 0 and mob_col_position < board_cols - 1:
+            mob_col_position > 0 and mob_col_position < board_cols - 1:
         return True
     else:
         return False
@@ -61,7 +62,8 @@ def mob_random_step(position):
     }
     selected_direction = random.choice(list(DIRECTIONS.keys()))
     return get_row_position(position) + DIRECTIONS[selected_direction]['row_increment'],\
-            get_col_position(position) + DIRECTIONS[selected_direction]['col_increment']
+        get_col_position(position) + \
+        DIRECTIONS[selected_direction]['col_increment']
 
 
 def mob_move(board, mob):
@@ -74,7 +76,7 @@ def mob_move(board, mob):
     board_cols = get_borad_cols(board)
     board_rows = get_board_rows(board)
     if board_cols <= (WALL_LEFT_WIDTH + WALL_RIGHT_WIDTH) or \
-        board_rows <= (WALL_TOP_WIDTH + WALL_BOTTOM_WIDTH):
+            board_rows <= (WALL_TOP_WIDTH + WALL_BOTTOM_WIDTH):
         return False, board
     mob_position = get_mob_position(board, mob)
     if len(mob_position) != 1:
@@ -83,8 +85,12 @@ def mob_move(board, mob):
     while valid_new_step is False:
         mob_new_position = mob_random_step(mob_position[0])
         if is_valid_mob_position(board_cols, board_rows, mob_new_position):
+            if mateszathmari.battle(
+                    board, mob_new_position[0], mob_new_position[1], mob):
+                board[get_row_position(mob_position[0])][get_col_position(mob_position[0])] = 0
+                break
             board[get_row_position(mob_position[0])][get_col_position(mob_position[0])],\
-            board[get_row_position(mob_new_position)][get_col_position(mob_new_position)] = 0, mob
+                board[get_row_position(mob_new_position)][get_col_position(
+                    mob_new_position)] = 0, mob
             valid_new_step = True
     return True, board
-    

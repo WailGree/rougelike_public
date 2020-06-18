@@ -177,11 +177,13 @@ def map_details(map_number):
     return BOARD_WIDTH, BOARD_HEIGHT, PLAYER_START_X, PLAYER_START_Y
 
 
-def battle(board, next_row, next_col):
-    if board[next_row][next_col] == '💀':
+def battle(board, next_row, next_col, mob):
+    if ((mob == '🧝' or mob == '👨' or mob == '🙇') and board[next_row][next_col] == '💀') or (mob == '💀' and (board[next_row][next_col] == '🧝' or board[next_row][next_col] == '👨' or board[next_row][next_col] == '🙇')):
         util.clear_screen()
         print('this is a fuckin battle and you gonna die\n press enter if you agree')
         input()
+        return True
+    return False
 
 
 def potter_wall(player, map_number, board, row, col, next_row, next_col):
@@ -195,7 +197,7 @@ def potter_wall(player, map_number, board, row, col, next_row, next_col):
 
 def move_depending_on_key(player, map_number, board, row, col, next_row, next_col):
     backpack = collect_stuffs(board, next_row, next_col)
-    battle(board, next_row, next_col)
+    battle(board, next_row, next_col, player)
     if checking_is_wall(board, next_row, next_col) is False:
         board[next_row][next_col] = board[row][col]
         if chech_is_door(map_number, door_positions, board, row, col):
