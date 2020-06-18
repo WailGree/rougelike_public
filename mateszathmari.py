@@ -102,11 +102,6 @@ def collect_stuffs(board, row, col):    # of the next step col/row
             backpack['🗝️ '] += 1
         else:
             backpack.update({'🗝️ ': 1})
-    elif board[row][col] == '💀':
-        if '💀' in backpack.keys():
-            backpack['💀'] += 1
-        else:
-            backpack.update({'💀': 1})
     elif board[row][col] == '🤕':
         if '🤕' in backpack.keys():
             backpack['🤕'] += 1
