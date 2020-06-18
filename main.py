@@ -63,35 +63,44 @@ def game(map_number, player):
     util.clear_screen()
     backpack = {}
     is_running = True
+    show_inventory = False
     while is_running:   # loop in loops in loops in loops
         engine.put_player_on_board(
             board, player, PLAYER_START_X, PLAYER_START_Y)
         ui.display_board(board)
+        if show_inventory:
+            WailGree.display_inventory()
         print(backpack)
 
         key = util.key_pressed()
         if key == 'q':
             is_running = False
         else:
-            board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack = mateszathmari.move_player(
-                key, board, player, map_number)
-            valid, board = ai.mob_move(board, '💀')
-            if board2 != 0:
-                board = board2
-                PLAYER_START_X = PLAYER_START_X2
-                PLAYER_START_Y = PLAYER_START_Y2
+            if key == 'w' or key == 'a' or key == 's' or key == 'd':
+                board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack = mateszathmari.move_player(
+                    key, board, player, map_number)
+                valid, board = ai.mob_move(board, '💀')
+                if board2 != 0:
+                    board = board2
+                    PLAYER_START_X = PLAYER_START_X2
+                    PLAYER_START_Y = PLAYER_START_Y2
+            elif key == 'i':
+                if show_inventory:
+                    show_inventory = False
+                else:
+                    show_inventory = True
         util.clear_screen()
 
 
 def main():
-    choice = input("Do you want to watch the story? (y/n)").upper()
-    if choice == 'Y':
-        WailGree.story_telling()
-    player = create_player()
-    if choice == 'Y':
-        WailGree.write_message(player['name'], '')
-    # player = {'gender': 'M', 'icon': '🙇',
-    #           'name': 'sdfsdf', 'race': 'Dwarf'}  # for test only
+    # choice = input("Do you want to watch the story? (y/n)").upper()
+    # if choice == 'Y':
+    #     WailGree.story_telling()
+    # player = create_player()
+    # if choice == 'Y':
+    #     WailGree.write_message(player['name'], '')
+    player = {'gender': 'M', 'icon': '🙇',
+              'name': 'sdfsdf', 'race': 'Dwarf'}  # for test only
     map_number = 1
     game(map_number, player['icon'])
 
