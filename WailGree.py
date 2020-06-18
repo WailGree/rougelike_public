@@ -9,7 +9,7 @@ def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 
-def display_inventory():
+def display_inventory(inventory):
     headers = ['Name', 'Amount']
     print(tabulate(sorted([(k, v)
                            for k, v in inventory.items()]), headers=headers))
@@ -81,7 +81,7 @@ def combat_event(dealer, target):
             target['HP'] = 0
     sleep(3)
     clear()
-    combat_display(player, mob)
+    combat_display(dealer, target)
     sleep(3)
     return dealer, target
 
@@ -120,14 +120,3 @@ food = {
     'McDonald\'s Happy Meal menu': {'HP restore': 35},
     'Grandma\'s family sized dinner': {'HP restore': 75}
 }
-
-inventory = [['Python shirt', 1, 1], ["Rushed breakfast", 1, 1]]
-inventory = {'Python shirt': 1, 'Grandma\'s family sized dinner': 2}
-headers = ["Item", "Amount"]
-# print(tabulate([k + str(v) for k, v in inventory.items()], headers=headers))
-
-# flip the code and name and sort
-# data = sorted([(k, v) for k, v in inventory.items()])
-player = {'name': 'WailGree', 'HP': 10, 'damage': 10, 'armor': 5}
-mob = {'name': 'goat', 'HP': 5, 'damage': 1, 'armor': 5}
-in_combat(player, mob)
