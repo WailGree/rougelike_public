@@ -96,7 +96,7 @@ def in_combat(player, mob):
             mob, player = combat_event(mob, player)
         else:
             is_running = False
-    if player['HP'] > 0 and mob['HP'] <= 0 and is_running:
+    if player['HP'] > 0 and mob['HP'] <= 0 :
         print(f"{player['name']} won the fight!")
         sleep(1)
         input("Press ENTER to continue...")
