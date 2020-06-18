@@ -64,11 +64,11 @@ def generate_mob(map_number):
         mob.update({'name': 'alien', 'HP': 15,
                     'damage': 3, 'armor': 5, 'icon': '👽'})
     elif map_number == 3:
-        mob.update({'name': 'devil', 'HP': 20,
-                    'damage': 1, 'armor': 7, 'icon': '👺'})
+        mob.update({'name': 'devil', 'HP': 10,
+                    'damage': 15, 'armor': 0, 'icon': '👺'})
     elif map_number == 4:
         mob.update({'name': 'mentor guardian', 'HP': 20,
-                    'damage': 1, 'armor': 7, 'icon': '👿'})
+                    'damage': 15, 'armor': 0, 'icon': '👿'})
     return mob
 
 
@@ -87,8 +87,7 @@ def game(map_number, player):
             board, player, PLAYER_START_X, PLAYER_START_Y)
         ui.display_board(board)
         if show_inventory:
-            WailGree.display_inventory(backpack)
-            print(mob)
+            WailGree.display_inventory(player)
 
         key = util.key_pressed()
         if key == 'q':

@@ -123,7 +123,7 @@ def print_win_or_lose(action):
         ''')
 
 
-def collect_stuffs(board, row, col):    # of the next step col/row
+def collect_stuffs(board, row, col, player):    # of the next step col/row
     backpack = main.backpack
     if board[row][col] == '🗝️ ':
         if '🗝️ ' in backpack.keys():
@@ -140,11 +140,13 @@ def collect_stuffs(board, row, col):    # of the next step col/row
             backpack['🗡️ '] += 1
         else:
             backpack.update({'🗡️ ': 1})
+        player['damage'] += randint(1, 7)
     elif board[row][col] == '🛡️ ':
         if '🛡️ ' in backpack.keys():
             backpack['🛡️ '] += 1
         else:
             backpack.update({'🛡️ ': 1})
+        player['armor'] += randint(1, 7)
     elif board[row][col] == '🐲':
         if '🐲' in backpack.keys():
             backpack['🐲'] += 1
@@ -155,7 +157,8 @@ def collect_stuffs(board, row, col):    # of the next step col/row
             backpack['💊'] += 1
         else:
             backpack.update({'💊': 1})
-    return backpack
+        player['HP'] += randint(1, 7)
+    return backpack, player
 
 
 def next_map(map_number, player, door_positions, row, col):
@@ -212,8 +215,8 @@ def battle(board, next_row, next_col, player, mob):
         if player['HP'] == 0:
             print_win_or_lose('lose')
             quit()  # GAME OVER update player details
-        return True
-    return False
+        return True, player
+    return False, player
 
 
 def potter_wall(player, map_number, board, row, col, next_row, next_col):
@@ -226,8 +229,8 @@ def potter_wall(player, map_number, board, row, col, next_row, next_col):
 
 
 def move_depending_on_key(player, map_number, board, row, col, next_row, next_col, mob):
-    backpack = collect_stuffs(board, next_row, next_col)
-    battle(board, next_row, next_col, player, mob)
+    backpack, player = collect_stuffs(board, next_row, next_col, player)
+    something, player = battle(board, next_row, next_col, player, mob)
     if checking_is_wall(board, next_row, next_col) is False:
         board[next_row][next_col] = board[row][col]
         if chech_is_door(map_number, door_positions, board, row, col):
@@ -295,6 +298,9 @@ def move_player(key, board, player, map_number, mob):
 def generate_stuffs(board, map_number, mob):
     width = len(board[0])
     height = len(board)
+    characters = ['🐲', '🛡️ ', '🗡️ ', '💊', '🤕']
+    for element in characters:
+        board[randint(1, height-2)][randint(1, width-2)] = element
     if map_number == 1:
         board[door_positions[0][0]][door_positions[0][1]] = '🚪'
         if '🗝️ ' not in main.backpack.keys():
@@ -327,8 +333,7 @@ def generate_stuffs(board, map_number, mob):
                 board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
         else:
             board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
-
-    characters = ['🐲', '🛡️ ', '🗡️ ', '💊', '🤕']
-    for element in characters:
-        board[randint(1, height-2)][randint(1, width-2)] = element
+            board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
+            board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
+            board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
     return board
