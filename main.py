@@ -93,14 +93,14 @@ def game(map_number, player):
 
 
 def main():
-    # choice = input("Do you want to watch the story? (y/n)").upper()
-    # if choice == 'Y':
-    #     WailGree.story_telling()
-    # player = create_player()
-    # if choice == 'Y':
-    #     WailGree.write_message(player['name'], '')
-    player = {'gender': 'M', 'icon': '🙇',
-              'name': 'sdfsdf', 'race': 'Dwarf'}  # for test only
+    choice = input("Do you want to watch the story? (y/n)").upper()
+    if choice == 'Y':
+        WailGree.story_telling()
+    player = create_player()
+    if choice == 'Y':
+        WailGree.write_message(player['name'], '')
+    # player = {'gender': 'M', 'icon': '🙇',
+    #           'name': 'sdfsdf', 'race': 'Dwarf'}  # for test only
     map_number = 1
     game(map_number, player['icon'])
 
