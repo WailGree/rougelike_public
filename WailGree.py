@@ -15,15 +15,15 @@ def display_inventory(inventory):
                            for k, v in inventory.items()]), headers=headers))
 
 
-def write_message(speaker, message):
+def write_message(speaker, message, delay=0.1, mark_delay=0.5):
     print(speaker+': ', end='')
     for letter in message:
         sys.stdout.write(letter)
         sys.stdout.flush()
         if letter == '!' or letter == '.' or letter == '?':
-            sleep(0.5)
+            sleep(mark_delay)
         else:
-            sleep(0.1)
+            sleep(delay)
 
 
 def story_telling():
@@ -66,7 +66,7 @@ def combat_display(creature1, creature2):
 def combat_event(dealer, target):
     clear()
     combat_display(dealer, target)
-    sleep(3)
+    sleep(1)
     if target['armor'] > 0:
         print(
             f"{dealer['name']} dealt {dealer['damage']} damage to {target['name']}\'s armor.")
@@ -84,7 +84,7 @@ def combat_event(dealer, target):
     sleep(3)
     clear()
     combat_display(dealer, target)
-    sleep(3)
+    sleep(1)
     return dealer, target
 
 

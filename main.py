@@ -27,12 +27,12 @@ def create_player():
     Returns:
     dictionary
     '''
-    WailGree.write_message('Student', 'Please tell me your name:')
+    WailGree.write_message('Student', 'Please tell me your name:', 0.01, 0.01)
     name = input()
     WailGree.write_message('Student', """Please choose a race (by number)
     1 Dwarf (ProgBasics) [10 HP, 5 damage, 3 armor]
     2 Human (Web)        [15 HP, 3 damage, 5 armor]
-    3 Elf   (OOP)        [20 HP, 1 damage, 7 armor]\n""")
+    3 Elf   (OOP)        [20 HP, 1 damage, 7 armor]\n""", 0.01, 0.01)
     race = input()
     if race == '1':
         race = 'Dwarf'
@@ -40,7 +40,7 @@ def create_player():
         race = 'Human'
     elif race == '3':
         race = 'Elf'
-    WailGree.write_message('Student', 'Please choose gender(m/f):')
+    WailGree.write_message('Student', 'Please choose gender(m/f):', 0.01, 0.01)
     gender = input()
     player = {'name': name, 'race': race}
     if race == 'Dwarf':
