@@ -55,11 +55,25 @@ def create_player():
     return player
 
 
+def generate_mob(map_number):
+    mob = {}
+    if map_number == 1:
+        mob.update({'HP': 10, 'damage': 5, 'armor': 3, 'icon': '💀'})
+    elif map_number == 2:
+        mob.update({'HP': 15, 'damage': 3, 'armor': 5, 'icon': '👽'})
+    elif map_number == 3:
+        mob.update({'HP': 20, 'damage': 1, 'armor': 7, 'icon': '👺'})
+    elif map_number == 4:
+        mob.update({'HP': 20, 'damage': 1, 'armor': 7, 'icon': '👿'})
+    return mob
+
+
 def game(map_number, player):
     BOARD_WIDTH, BOARD_HEIGHT, PLAYER_START_X, PLAYER_START_Y = mateszathmari.map_details(
         map_number)
+    mob = generate_mob(map_number)
     board = mateszathmari.generate_stuffs(
-        engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), map_number)
+        engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), map_number, mob)
     util.clear_screen()
     backpack = {}
     is_running = True
@@ -70,6 +84,7 @@ def game(map_number, player):
         ui.display_board(board)
         if show_inventory:
             WailGree.display_inventory()
+            print(mob)
         print(backpack)
 
         key = util.key_pressed()
@@ -77,9 +92,10 @@ def game(map_number, player):
             is_running = False
         else:
             if key == 'w' or key == 'a' or key == 's' or key == 'd':
+                mob = generate_mob(map_number)
                 board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack = mateszathmari.move_player(
-                    key, board, player, map_number)
-                valid, board = ai.mob_move(board, '💀')
+                    key, board, player, map_number, mob)
+                valid, board = ai.mob_move(board, mob['icon'], player, mob)
                 if board2 != 0:
                     board = board2
                     PLAYER_START_X = PLAYER_START_X2
@@ -102,7 +118,7 @@ def main():
     # player = {'gender': 'M', 'icon': '🙇',
     #           'name': 'sdfsdf', 'race': 'Dwarf'}  # for test only
     map_number = 1
-    game(map_number, player['icon'])
+    game(map_number, player)
 
 
 if __name__ == '__main__':

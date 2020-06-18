@@ -28,8 +28,8 @@ def put_player_on_board(board, player, x, y):
     is_in_board = False
     for h in range(height):
         for w in range(width):
-            if board[h][w] == player:
+            if board[h][w] == player['icon']:
                 is_in_board = True
                 break
     if is_in_board is False:
-        board[x][y] = player
+        board[x][y] = player['icon']

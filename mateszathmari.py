@@ -144,7 +144,7 @@ def next_map(map_number, player, door_positions, row, col):
     BOARD_WIDTH, BOARD_HEIGHT, PLAYER_START_X, PLAYER_START_Y = map_details(
         new_map_number)
     board = generate_stuffs(
-        engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), new_map_number)
+        engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), new_map_number, main.generate_mob(new_map_number))
     if new_map_number < map_number:
         PLAYER_START_X, PLAYER_START_Y = room_back(new_map_number, map_number)
     return board, PLAYER_START_X, PLAYER_START_Y, new_map_number
@@ -177,8 +177,10 @@ def map_details(map_number):
     return BOARD_WIDTH, BOARD_HEIGHT, PLAYER_START_X, PLAYER_START_Y
 
 
-def battle(board, next_row, next_col, mob):
-    if ((mob == '🧝' or mob == '👨' or mob == '🙇') and board[next_row][next_col] == '💀') or (mob == '💀' and (board[next_row][next_col] == '🧝' or board[next_row][next_col] == '👨' or board[next_row][next_col] == '🙇')):
+def battle(board, next_row, next_col, player, mob):
+    player_icon = player['icon']
+    mob_icon = mob['icon']
+    if ((player_icon == '🧝' or player_icon == '👨' or player_icon == '🙇') and board[next_row][next_col] == mob_icon) or ((mob_icon == '💀' or mob_icon == '👿' or mob_icon == '👺' or mob_icon == '👽') and board[next_row][next_col] == player_icon):
         util.clear_screen()
         print('this is a fuckin battle and you gonna die\n press enter if you agree')
         input()
@@ -195,9 +197,9 @@ def potter_wall(player, map_number, board, row, col, next_row, next_col):
         return True
 
 
-def move_depending_on_key(player, map_number, board, row, col, next_row, next_col):
+def move_depending_on_key(player, map_number, board, row, col, next_row, next_col, mob):
     backpack = collect_stuffs(board, next_row, next_col)
-    battle(board, next_row, next_col, player)
+    battle(board, next_row, next_col, player, mob)
     if checking_is_wall(board, next_row, next_col) is False:
         board[next_row][next_col] = board[row][col]
         if chech_is_door(map_number, door_positions, board, row, col):
@@ -207,20 +209,20 @@ def move_depending_on_key(player, map_number, board, row, col, next_row, next_co
         board2, PLAYER_START_X2, PLAYER_START_Y2 = 0, 0, 0
         return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
     else:
-        if potter_wall(player, map_number, board, row, col, next_row, next_col):
+        if potter_wall(player['icon'], map_number, board, row, col, next_row, next_col):
             if map_number == 1:
                 map_number = 4
                 BOARD_WIDTH, BOARD_HEIGHT, PLAYER_START_X, PLAYER_START_Y = map_details(
                     map_number)
                 board2 = generate_stuffs(
-                    engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), map_number)
+                    engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), map_number, main.generate_mob(map_number))
                 PLAYER_START_X2, PLAYER_START_Y2 = 0, 15
             elif map_number == 4:
                 map_number = 1
                 BOARD_WIDTH, BOARD_HEIGHT, PLAYER_START_X, PLAYER_START_Y = map_details(
-                    1)
+                    map_number)
                 board2 = generate_stuffs(
-                    engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), 1)
+                    engine.create_board(BOARD_WIDTH, BOARD_HEIGHT), map_number, main.generate_mob(map_number))
                 PLAYER_START_X2, PLAYER_START_Y2 = 19, 27
             # generate 4.th room
             return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
@@ -235,54 +237,58 @@ def move_depending_on_key(player, map_number, board, row, col, next_row, next_co
             return board2, PLAYER_START_X2, PLAYER_START_Y2, map_number, backpack
 
 
-def move_player(key, board, player, map_number):
+def move_player(key, board, player, map_number, mob):
     width = len(board[0])
     height = len(board)
     for h in range(height):
         for w in range(width):
-            if board[h][w] == player:
+            if board[h][w] == player['icon']:
                 row = h
                 col = w
     if key == 'w':
         if row - 1 >= 0:
             board, PLAYER_START_X, PLAYER_START_Y, map_number, backpack = move_depending_on_key(
-                player, map_number, board, row, col, row-1, col)
+                player, map_number, board, row, col, row-1, col, mob)
     elif key == 's':
         if row + 1 < height:
             board, PLAYER_START_X, PLAYER_START_Y, map_number, backpack = move_depending_on_key(
-                player, map_number, board, row, col, row+1, col)
+                player, map_number, board, row, col, row+1, col, mob)
     elif key == 'a':
         if col - 1 >= 0:
             board, PLAYER_START_X, PLAYER_START_Y, map_number, backpack = move_depending_on_key(
-                player, map_number, board, row, col, row, col-1)
+                player, map_number, board, row, col, row, col-1, mob)
     elif key == 'd':
         if col + 1 < width:
             board, PLAYER_START_X, PLAYER_START_Y, map_number, backpack = move_depending_on_key(
-                player, map_number, board, row, col, row, col+1)
+                player, map_number, board, row, col, row, col+1, mob)
     return board, PLAYER_START_X, PLAYER_START_Y, map_number, backpack
 
 
-def generate_stuffs(board, map_number):
+def generate_stuffs(board, map_number, mob):
     width = len(board[0])
     height = len(board)
     if map_number == 1:
         board[door_positions[0][0]][door_positions[0][1]] = '🚪'
         if '🗝️ ' not in main.backpack.keys():
             board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
+            board[randint(1, height-2)][randint(1, width-2)] = mob['icon']
     elif map_number == 2:
         board[door_positions[1][0]][door_positions[1][1]] = '🚪'
         board[door_positions[1][2]][door_positions[1][3]] = '🚪'
+        board[randint(1, height-2)][randint(1, width-2)] = mob['icon']
         if main.backpack['🗝️ '] == 1:
             board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
     elif map_number == 3:
         board[door_positions[2][0]][door_positions[2][1]] = '🚪'
         board[door_positions[2][2]][door_positions[2][3]] = '🚪'
+        board[randint(1, height-2)][randint(1, width-2)] = mob['icon']
         if main.backpack['🗝️ '] == 2:
             board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
     elif map_number == 4:
         board[door_positions[3][0]][door_positions[3][1]] = '🚪'
+        board[randint(1, height-2)][randint(1, width-2)] = mob['icon']
 
-    characters = ['🐲', '🛡️ ', '🗡️ ', '💊', '🤕', '💀']
+    characters = ['🐲', '🛡️ ', '🗡️ ', '💊', '🤕']
     for element in characters:
         board[randint(1, height-2)][randint(1, width-2)] = element
     return board

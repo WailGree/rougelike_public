@@ -1,6 +1,7 @@
 import copy
 import random
 import mateszathmari
+import main
 
 
 def get_mob_position(board, mob):
@@ -66,7 +67,7 @@ def mob_random_step(position):
         DIRECTIONS[selected_direction]['col_increment']
 
 
-def mob_move(board, mob):
+def mob_move(board, mob, player, mob_details):
     WALL_TOP_WIDTH = 1
     WALL_BOTTOM_WIDTH = 1
     WALL_LEFT_WIDTH = 1
@@ -86,8 +87,9 @@ def mob_move(board, mob):
         mob_new_position = mob_random_step(mob_position[0])
         if is_valid_mob_position(board_cols, board_rows, mob_new_position):
             if mateszathmari.battle(
-                    board, mob_new_position[0], mob_new_position[1], mob):
-                board[get_row_position(mob_position[0])][get_col_position(mob_position[0])] = 0
+                    board, mob_new_position[0], mob_new_position[1], player, mob_details):
+                board[get_row_position(mob_position[0])
+                      ][get_col_position(mob_position[0])] = 0
                 break
             board[get_row_position(mob_position[0])][get_col_position(mob_position[0])],\
                 board[get_row_position(mob_new_position)][get_col_position(
