@@ -135,6 +135,7 @@ def collect_stuffs(board, row, col, player):    # of the next step col/row
             backpack['🤕'] += 1
         else:
             backpack.update({'🤕': 1})
+        player['HP'] -= randint(1, 3)
     elif board[row][col] == '🗡️ ':
         if '🗡️ ' in backpack.keys():
             backpack['🗡️ '] += 1
@@ -152,6 +153,7 @@ def collect_stuffs(board, row, col, player):    # of the next step col/row
             backpack['🐲'] += 1
         else:
             backpack.update({'🐲': 1})
+        player['armor'] -= randint(1, 4)
     elif board[row][col] == '💊':
         if '💊' in backpack.keys():
             backpack['💊'] += 1
