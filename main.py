@@ -30,9 +30,9 @@ def create_player():
     WailGree.write_message('Student', 'Please tell me your name:')
     name = input()
     WailGree.write_message('Student', """Please choose a race (by number)
-    1 Dwarf (ProgBasics)
-    2 Human (Web)
-    3 Elf   (OOP)\n""")
+    1 Dwarf (ProgBasics) [10 HP, 5 damage, 3 armor]
+    2 Human (Web)        [15 HP, 3 damage, 5 armor]
+    3 Elf   (OOP)        [20 HP, 1 damage, 7 armor]\n""")
     race = input()
     if race == '1':
         race = 'Dwarf'
@@ -42,16 +42,16 @@ def create_player():
         race = 'Elf'
     WailGree.write_message('Student', 'Please choose gender(m/f):')
     gender = input()
-    player = {'name': name, 'race': race, 'gender': gender.upper()}
+    player = {'name': name, 'race': race}
     if race == 'Dwarf':
         if gender.upper() == 'M' or gender.upper() == 'F':
-            player.update({'icon': '🙇'})
+            player.update({'HP': 10, 'damage': 5, 'armor': 3, 'icon': '🙇'})
     elif race == 'Human':
         if gender.upper() == 'M' or gender.upper() == 'F':
-            player.update({'icon': '👨'})
+            player.update({'HP': 15, 'damage': 3, 'armor': 5, 'icon': '👨'})
     elif race == 'Elf':
         if gender.upper() == 'M' or gender.upper() == 'F':
-            player.update({'icon': '🧝'})
+            player.update({'HP': 20, 'damage': 1, 'armor': 7, 'icon': '🧝'})
     return player
 
 
