@@ -49,6 +49,7 @@
 import engine
 import main
 import util
+import WailGree
 from random import randint
 
 # [room[exit pos x,exit pos y,enter pos x,enter pos y]]
@@ -181,9 +182,7 @@ def battle(board, next_row, next_col, player, mob):
     player_icon = player['icon']
     mob_icon = mob['icon']
     if ((player_icon == '🧝' or player_icon == '👨' or player_icon == '🙇') and board[next_row][next_col] == mob_icon) or ((mob_icon == '💀' or mob_icon == '👿' or mob_icon == '👺' or mob_icon == '👽') and board[next_row][next_col] == player_icon):
-        util.clear_screen()
-        print('this is a fuckin battle and you gonna die\n press enter if you agree')
-        input()
+        WailGree.in_combat(player, mob)
         return True
     return False
 
