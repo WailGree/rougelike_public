@@ -1,6 +1,13 @@
 # Roland's working file
 from time import sleep
 import sys
+from tabulate import tabulate
+
+
+def display_inventory():
+    headers = ['Name', 'Amount']
+    print(tabulate(sorted([(k, v)
+                           for k, v in inventory.items()]), headers=headers))
 
 
 def write_message(speaker, message):
@@ -54,3 +61,11 @@ food = {
     'McDonald\'s Happy Meal menu': {'HP restore': 35},
     'Grandma\'s family sized dinner': {'HP restore': 75}
 }
+
+inventory = [['Python shirt', 1, 1], ["Rushed breakfast", 1, 1]]
+inventory = {'Python shirt': 1, 'Grandma\'s family sized dinner': 2}
+headers = ["Item", "Amount"]
+# print(tabulate([k + str(v) for k, v in inventory.items()], headers=headers))
+
+# flip the code and name and sort
+# data = sorted([(k, v) for k, v in inventory.items()])
