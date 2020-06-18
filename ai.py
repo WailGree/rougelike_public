@@ -1,7 +1,6 @@
 import copy
 import random
 import mateszathmari
-import main
 
 
 def get_mob_position(board, mob):

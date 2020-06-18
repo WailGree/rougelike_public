@@ -48,13 +48,12 @@
 
 import engine
 import main
-import util
 import WailGree
 from random import randint
 
 # [room[exit pos x,exit pos y,enter pos x,enter pos y]]
 door_positions = [[6, 29, 0, 0], [1, 0, 22, 5], [
-    0, 5, 7, 0], [13, 17, 0, 0]]
+    0, 5, 7, 0], [13, 17, 13, 0]]
 
 
 def checking_is_wall(board, row, col):
@@ -93,6 +92,35 @@ def next_map_numer(map_number, row, col, door_positions):
     elif row == door_positions[map_number-1][2] and col == door_positions[map_number-1][3]:
         new_map_number = map_number + 1
     return new_map_number
+
+
+def print_win_or_lose(action):
+    if action == 'win':
+        print('''
+▓██   ██▓ ▒█████   █    ██      █     █░  ██▓ ███▄    █ 
+ ▒██  ██▒▒██▒  ██▒ ██  ▓██▒    ▓█░ █ ░█░▒▓██▒ ██ ▀█   █ 
+  ▒██ ██░▒██░  ██▒▓██  ▒██░    ▒█░ █ ░█ ▒▒██▒▓██  ▀█ ██▒
+  ░ ▐██▓░▒██   ██░▓▓█  ░██░    ░█░ █ ░█ ░░██░▓██▒  ▐▌██▒
+  ░ ██▒▓░░ ████▓▒░▒▒█████▓     ░░██▒██▓ ░░██░▒██░   ▓██░
+   ██▒▒▒ ░ ▒░▒░▒░ ░▒▓▒ ▒ ▒     ░ ▓░▒ ▒   ░▓  ░ ▒░   ▒ ▒ 
+ ▓██ ░▒░   ░ ▒ ▒░ ░░▒░ ░ ░       ▒ ░ ░  ░ ▒ ░░ ░░   ░ ▒░
+ ▒ ▒ ░░  ░ ░ ░ ▒   ░░░ ░ ░       ░   ░  ░ ▒ ░   ░   ░ ░ 
+ ░ ░         ░ ░     ░             ░      ░           ░ 
+
+        ''')
+    elif action == 'lose':
+        print('''
+▓██   ██▓ ▒█████   █    ██       ██▓    ▒█████    ██████  ▓█████
+ ▒██  ██▒▒██▒  ██▒ ██  ▓██▒     ▓██▒   ▒██▒  ██▒▒██    ▒  ▓█   ▀
+  ▒██ ██░▒██░  ██▒▓██  ▒██░     ▒██░   ▒██░  ██▒░ ▓██▄    ▒███  
+  ░ ▐██▓░▒██   ██░▓▓█  ░██░     ▒██░   ▒██   ██░  ▒   ██▒ ▒▓█  ▄
+  ░ ██▒▓░░ ████▓▒░▒▒█████▓     ▒░██████░ ████▓▒░▒██████▒▒▒░▒████
+   ██▒▒▒ ░ ▒░▒░▒░ ░▒▓▒ ▒ ▒     ░░ ▒░▓  ░ ▒░▒░▒░ ▒ ▒▓▒ ▒ ░░░░ ▒░ 
+ ▓██ ░▒░   ░ ▒ ▒░ ░░▒░ ░ ░     ░░ ░ ▒    ░ ▒ ▒░ ░ ░▒  ░ ░░ ░ ░  
+ ▒ ▒ ░░  ░ ░ ░ ▒   ░░░ ░ ░        ░ ░  ░ ░ ░ ▒  ░  ░  ░      ░  
+ ░ ░         ░ ░     ░         ░    ░      ░ ░        ░  ░   ░  
+
+        ''')
 
 
 def collect_stuffs(board, row, col):    # of the next step col/row
@@ -170,6 +198,9 @@ def map_details(map_number):
     elif map_number == 4:
         BOARD_WIDTH, BOARD_HEIGHT = 18, 15
         PLAYER_START_X, PLAYER_START_Y = 13, 16
+    elif map_number == 5:
+        print_win_or_lose('win')
+        quit()
     return BOARD_WIDTH, BOARD_HEIGHT, PLAYER_START_X, PLAYER_START_Y
 
 
@@ -177,7 +208,10 @@ def battle(board, next_row, next_col, player, mob):
     player_icon = player['icon']
     mob_icon = mob['icon']
     if ((player_icon == '🧝' or player_icon == '👨' or player_icon == '🙇') and board[next_row][next_col] == mob_icon) or ((mob_icon == '💀' or mob_icon == '👿' or mob_icon == '👺' or mob_icon == '👽') and board[next_row][next_col] == player_icon):
-        WailGree.in_combat(player, mob)
+        player = WailGree.in_combat(player, mob)
+        if player['HP'] == 0:
+            print_win_or_lose('lose')
+            quit()  # GAME OVER update player details
         return True
     return False
 
@@ -265,22 +299,34 @@ def generate_stuffs(board, map_number, mob):
         board[door_positions[0][0]][door_positions[0][1]] = '🚪'
         if '🗝️ ' not in main.backpack.keys():
             board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
-            board[randint(1, height-2)][randint(1, width-2)] = mob['icon']
+        board[randint(1, height-2)][randint(1, width-2)] = mob['icon']
     elif map_number == 2:
         board[door_positions[1][0]][door_positions[1][1]] = '🚪'
         board[door_positions[1][2]][door_positions[1][3]] = '🚪'
         board[randint(1, height-2)][randint(1, width-2)] = mob['icon']
-        if main.backpack['🗝️ '] == 1:
+        if '🗝️ ' in main.backpack.keys():
+            if main.backpack['🗝️ '] == 1:
+                board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
+        else:
             board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
     elif map_number == 3:
         board[door_positions[2][0]][door_positions[2][1]] = '🚪'
         board[door_positions[2][2]][door_positions[2][3]] = '🚪'
         board[randint(1, height-2)][randint(1, width-2)] = mob['icon']
-        if main.backpack['🗝️ '] == 2:
+        if '🗝️ ' in main.backpack.keys():
+            if main.backpack['🗝️ '] == 2:
+                board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
+        else:
             board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
     elif map_number == 4:
         board[door_positions[3][0]][door_positions[3][1]] = '🚪'
+        board[door_positions[3][2]][door_positions[3][3]] = '🚪'
         board[randint(1, height-2)][randint(1, width-2)] = mob['icon']
+        if '🗝️ ' in main.backpack.keys():
+            if main.backpack['🗝️ '] == 3:
+                board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
+        else:
+            board[randint(1, height-2)][randint(1, width-2)] = '🗝️ '
 
     characters = ['🐲', '🛡️ ', '🗡️ ', '💊', '🤕']
     for element in characters:
